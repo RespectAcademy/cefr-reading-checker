@@ -16,12 +16,18 @@ CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
 cefr_words = {level: set() for level in CEFR_LEVELS}
 
 # Example: Load word lists from local .txt files like data/a1.txt, data/b1.txt, etc.
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
 for level in CEFR_LEVELS:
     try:
-        with open(f"data/{level.lower()}.txt", "r", encoding="utf-8") as f:
-            cefr_words[level] = set(word.strip().lower() for word in f.readlines())
+        filepath = os.path.join(DATA_DIR, f"{level.lower()}.txt")
+        with open(filepath, "r", encoding="utf-8") as f:
+            cefr_words[level] = set(word.strip().lower() for word in f if word.strip())
     except FileNotFoundError:
-        pass
+        print(f"⚠️ Missing file: {level.lower()}.txt")
 
 # Example idioms/phrasal verbs (you can expand this)
 phrasal_verbs = ["give up", "look after", "put off", "take off", "come across"]
